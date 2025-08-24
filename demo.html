@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo de Scraping</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        #results { margin-top: 20px; border-top: 2px solid #ccc; padding-top: 10px; }
+        .result-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        .result-item h3 { margin-top: 0; color: #007BFF; }
+        button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Démo de Scraping EUR-Lex</h1>
+    <p>Cliquez sur le bouton pour récupérer les résultats de la première page.</p>
+    <button id="scrapeButton">Lancer le Scraping</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('scrapeButton').addEventListener('click', async () => {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = 'Chargement...';
+
+            try {
+                // Appel à votre API de scraping
+                const response = await fetch('/scrape-eurlex');
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    resultsContainer.innerHTML = '<h2>Résultats trouvés :</h2>';
+                    data.results.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'result-item';
+                        div.innerHTML = `
+                            <h3>${item.title}</h3>
+                            <p><strong>ID:</strong> ${item.internalId}</p>
+                            <p><strong>Lien:</strong> <a href="${item.link}" target="_blank">${item.link}</a></p>
+                        `;
+                        resultsContainer.appendChild(div);
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<p>Aucun résultat trouvé.</p>';
+                }
+            } catch (error) {
+                resultsContainer.innerHTML = `<p>Erreur lors de la récupération des données: ${error.message}</p>`;
+                console.error('Erreur:', error);
+            }
+        });
+    </script>
+</body>
+</html>

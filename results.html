@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUR-Lex Scraping Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 1200px; margin: auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        #loading { text-align: center; padding: 20px; color: #555; }
+        #resultsTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        #resultsTable th, #resultsTable td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; }
+        #resultsTable th { background-color: #0056b3; color: white; text-transform: uppercase; }
+        #resultsTable tr:nth-child(even) { background-color: #f9f9f9; }
+        #resultsTable tr:hover { background-color: #f1f1f1; }
+        .result-link { color: #0056b3; text-decoration: none; }
+        .result-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Résultats de recherche EUR-Lex</h1>
+        <div id="loading">Chargement des résultats, veuillez patienter...</div>
+        <table id="resultsTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Titre du document</th>
+                    <th>Identifiant interne</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/scrape-all-eurlex');
+                const data = await response.json();
+                console.log(data);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('resultsTable').style.display = 'table';
+
+                if (data.results && data.results.length > 0) {
+                    const resultsBody = document.getElementById('resultsBody');
+                    data.results.forEach(result => {
+                        const row = document.createElement('tr');
+                        
+                        const titleCell = document.createElement('td');
+                        const link = document.createElement('a');
+                        link.href = result.link;
+                        link.textContent = result.title;
+                        link.target = "_blank"; // Ouvre le lien dans un nouvel onglet
+                        link.classList.add('result-link');
+                        titleCell.appendChild(link);
+
+                        const idCell = document.createElement('td');
+                        idCell.textContent = result.internalId;
+
+                        row.appendChild(titleCell);
+                        row.appendChild(idCell);
+                        resultsBody.appendChild(row);
+                    });
+                } else {
+                    document.getElementById('loading').textContent = data.message || 'Aucun résultat trouvé.';
+                }
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données:', error);
+                document.getElementById('loading').textContent = 'Erreur lors du chargement des résultats.';
+            }
+        });
+    </script>
+
+</body>
+</html>

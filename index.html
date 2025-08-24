@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraper EUR-Lex</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2em; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 4px; }
+        .example { background: #e9e9e9; padding: 1em; border-left: 5px solid #0056b3; }
+        .button-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur le Scraper EUR-Lex</h1>
+    <p>Cette API vous permet de récupérer des données de recherche spécifiques sur le site EUR-Lex.</p>
+
+    <h2>Utilisation de l'API</h2>
+    <p>Pour lancer le scraping de toutes les pages de résultats et afficher les données dans un tableau structuré, cliquez sur le bouton ci-dessous :</p>
+    
+    <div class="example">
+        <p>Endpoint pour la recherche complète :</p>
+        <p><code>GET /scrape-all-eurlex</code></p>
+        <a href="/display-results" class="button-link">Afficher les résultats structurés</a>
+    </div>
+    
+    <p>Les données brutes seront également disponibles au format JSON en accédant directement à l'endpoint : <code>/scrape-all-eurlex</code>.</p>
+</body>
+</html>
